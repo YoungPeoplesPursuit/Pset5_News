@@ -63,19 +63,19 @@ class NewsStory(object):
         self.pubdate = pubdate
 
     def get_guid(self):
-        return guid
+        return self.guid
 
     def get_title(self):
-        return title
+        return self.title
 
     def get_description(self):
-        return description
+        return self.description
 
     def get_link(self):
-        return link
+        return self.link
 
     def get_pubdate(self):
-        return pubdate
+        return self.pubdate
 
 
 
@@ -107,9 +107,16 @@ class PhraseTrigger(Trigger):
             else:
                 checked = checked + c.lower()
         wordlist = checked.split() #split checked into words by space
-        checked_nospace = wordlist.join() #join words seperated by space to get rid of extra spaces
-        return self.phrase in checked_nospace
+        checked_no_space = " ".join(wordlist) #excerpt with cleaned spaces
+        phraselist = (self.phrase).split()
 
+        if self.phrase not in checked_no_space:
+            return False
+        else:
+            for e in phraselist:
+                if e not in wordlist:
+                    return False
+            return True
 
 
 # Problem 3
@@ -132,16 +139,38 @@ class DescriptionTrigger(PhraseTrigger):
 # TIME TRIGGERS
 
 # Problem 5
-# TODO: TimeTrigger
+
+class TimeTrigger(Trigger):
+    def __init__(self, stringtime):
+        format_string = "%d %b %Y %H:%M:%S"
+        dateformat = datetime.strptime(stringtime, format_string)
 # Constructor:
 #        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
 #        Convert time from string to a datetime before saving it as an attribute.
 
 # Problem 6
-# TODO: BeforeTrigger and AfterTrigger
 
+class BeforeTrigger(Trigger):
+    def __init__(self, stringtime):
+        format_string = "%d %b %Y %H:%M:%S"
+        dateformat = datetime.strptime(stringtime, format_string)
+        self.time = dateformat
 
-# COMPOSITE TRIGGERS
+    def evaluate(self, story):
+        storytime = story.get_pubdate()
+        return storytime < self.time
+
+class AfterTrigger(Trigger):
+    def __init__(self, stringtime):
+        format_string = "%d %b %Y %H:%M:%S"
+        dateformat = datetime.strptime(stringtime, format_string)
+        self.time = dateformat
+
+    def evaluate(self, story):
+        storytime = story.get_pubdate()
+        return storytime > self.time
+
+        # COMPOSITE TRIGGERS
 
 # Problem 7
 # TODO: NotTrigger
