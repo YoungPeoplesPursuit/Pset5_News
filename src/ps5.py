@@ -1,5 +1,5 @@
 # 6.0001/6.00 Problem Set 5 - RSS Feed Filter
-# Name:
+# Name: Tina
 # Collaborators:
 # Time:
 
@@ -52,9 +52,31 @@ def process(url):
 # Data structure design
 #======================
 
-# Problem 1
+# Problem 1: NewsStory
 
-# TODO: NewsStory
+class NewsStory(object):
+    def __init__(self, guid, title, description, link, pubdate):
+        self.guid = guid
+        self.title = title
+        self.description = description
+        self.link = link
+        self.pubdate = pubdate
+
+    def get_guid(self):
+        return guid
+
+    def get_title(self):
+        return title
+
+    def get_description(self):
+        return description
+
+    def get_link(self):
+        return link
+
+    def get_pubdate(self):
+        return pubdate
+
 
 
 #======================
@@ -73,13 +95,39 @@ class Trigger(object):
 # PHRASE TRIGGERS
 
 # Problem 2
-# TODO: PhraseTrigger
+
+class PhraseTrigger(Trigger):
+    def __init__(self, phrase):
+        self.phrase = phrase.lower()
+    def is_phrase_in(self, excerpt):
+        checked = "" #creating a new string that is cleaned excerpt
+        for c in excerpt:
+            if c in string.punctuation:
+                checked = checked + " "
+            else:
+                checked = checked + c.lower()
+        wordlist = checked.split() #split checked into words by space
+        checked_nospace = wordlist.join() #join words seperated by space to get rid of extra spaces
+        return self.phrase in checked_nospace
+
+
 
 # Problem 3
-# TODO: TitleTrigger
+
+class TitleTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        self.phrase = phrase.lower()
+    def evaluate(self, story):
+        excerpt = story.get_title()
+        return self.is_phrase_in(excerpt)
 
 # Problem 4
-# TODO: DescriptionTrigger
+class DescriptionTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        self.phrase = phrase.lower()
+    def evaluate(self, story):
+        excerpt = story.get_description()
+        return self.is_phrase_in(excerpt)
 
 # TIME TRIGGERS
 
