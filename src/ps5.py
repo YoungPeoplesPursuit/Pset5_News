@@ -13,6 +13,7 @@ from datetime import datetime
 import pytz
 
 
+
 #-----------------------------------------------------------------------
 
 #======================
@@ -123,7 +124,7 @@ class PhraseTrigger(Trigger):
 
 class TitleTrigger(PhraseTrigger):
     def __init__(self, phrase):
-        self.phrase = phrase.lower()
+        super().__init__(phrase)
     def evaluate(self, story):
         excerpt = story.get_title()
         return self.is_phrase_in(excerpt)
@@ -131,7 +132,7 @@ class TitleTrigger(PhraseTrigger):
 # Problem 4
 class DescriptionTrigger(PhraseTrigger):
     def __init__(self, phrase):
-        self.phrase = phrase.lower()
+        super().__init__(phrase)
     def evaluate(self, story):
         excerpt = story.get_description()
         return self.is_phrase_in(excerpt)
@@ -144,27 +145,26 @@ class TimeTrigger(Trigger):
     def __init__(self, stringtime):
         format_string = "%d %b %Y %H:%M:%S"
         dateformat = datetime.strptime(stringtime, format_string)
+        est_timezone = pytz.timezone('US/Eastern')  # Define EST timezone
+        self.time = dateformat.replace(tzinfo=est_timezone) #the news is in eastern time so make everything EST
+
 # Constructor:
 #        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
 #        Convert time from string to a datetime before saving it as an attribute.
 
 # Problem 6
 
-class BeforeTrigger(Trigger):
+class BeforeTrigger(TimeTrigger):
     def __init__(self, stringtime):
-        format_string = "%d %b %Y %H:%M:%S"
-        dateformat = datetime.strptime(stringtime, format_string)
-        self.time = dateformat
+        super().__init__(stringtime) #inherits constructor from superclass
 
     def evaluate(self, story):
         storytime = story.get_pubdate()
         return storytime < self.time
 
-class AfterTrigger(Trigger):
+class AfterTrigger(TimeTrigger):
     def __init__(self, stringtime):
-        format_string = "%d %b %Y %H:%M:%S"
-        dateformat = datetime.strptime(stringtime, format_string)
-        self.time = dateformat
+        super().__init__(stringtime)
 
     def evaluate(self, story):
         storytime = story.get_pubdate()
@@ -173,14 +173,29 @@ class AfterTrigger(Trigger):
         # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
 
+class NotTrigger(Trigger):
+    def __init__(self, T):
+        self.T = T
+    def evaluate(self, story):
+        return not (self.T).evaluate(story)
 # Problem 8
-# TODO: AndTrigger
+
+class AndTrigger(Trigger):
+    def __init__(self, T1, T2):
+        self.T1 = T1
+        self.T2 = T2
+    def evaluate(self, story):
+        return (self.T1).evaluate(story) and (self.T2).evaluate(story)
 
 # Problem 9
-# TODO: OrTrigger
 
+class OrTrigger(Trigger):
+    def __init__(self, T1, T2):
+        self.T1 = T1
+        self.T2 = T2
+    def evaluate(self, story):
+        return (self.T1).evaluate(story) or (self.T2).evaluate(story)
 
 #======================
 # Filtering
