@@ -3,13 +3,13 @@
 // stories!
 
 // title trigger named t1
-t1,TITLE,election
+t1,TITLE,Tariff
 
 // description trigger named t2
 t2,DESCRIPTION,Trump
 
 // description trigger named t3
-t3,DESCRIPTION,Clinton
+t3,DESCRIPTION,Elon
 
 // after trigger named t4
 t4,AFTER,3 Oct 2016 17:00:10
