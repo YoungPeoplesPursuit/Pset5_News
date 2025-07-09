@@ -14,15 +14,15 @@ Uses feedparser to grab articles from RSS feeds.
 
 Parses each entry into a NewsStory object, which holds:
 
-  GUID (unique ID)
+-  GUID (unique ID)
   
-  Title
+-  Title
   
-  Description
+-  Description
   
-  Link
+-  Link
   
-  Publication date
+-  Publication date
 
 2. Trigger System
    
@@ -30,23 +30,23 @@ A bunch of classes inherit from Trigger, each deciding whether a story is intere
 
 Word Triggers:
 
-  PhraseTrigger: fires when an exact phrase is found.
+-  PhraseTrigger: fires when an exact phrase is found.
   
-    TitleTrigger: fires when a word appears in the title.
+    - TitleTrigger: fires when a word appears in the title.
     
-    DescriptionTrigger: fires when a word appears in the description.
+    - DescriptionTrigger: fires when a word appears in the description.
     
 Time Triggers:
 
-  BeforeTrigger / AfterTrigger: check publication date.
+  - BeforeTrigger / AfterTrigger: check publication date.
 
 Composite Triggers:
 
-  NotTrigger: negates another trigger.
+  - NotTrigger: negates another trigger.
   
-  AndTrigger: fires if both triggers fire.
+  - AndTrigger: fires if both triggers fire.
   
-  OrTrigger: fires if either trigger fires.
+  - OrTrigger: fires if either trigger fires.
 
 3. User-defined Triggers
    
@@ -58,24 +58,24 @@ Uses tkinter to display stories in a neat little window. You can scroll through 
 
 Files:
 
-  rssfeedparser.py: Handles the RSS fetching and story object creation.
+  - rssfeedparser.py: Handles the RSS fetching and story object creation.
   
-  triggers.py: Contains all trigger class definitions.
+  - triggers.py: Contains all trigger class definitions.
   
-  pset5.py: Main script that runs the whole system.
+  - pset5.py: Main script that runs the whole system.
   
-  triggers.txt: Your news filtering manifesto.
+  - triggers.txt: Your news filtering manifesto.
 
 Requirements:
 
-  Python 3
+  - Python 3
   
-  feedparser
+  - feedparser
   
-  tkinter (comes with most Python installs)
+  - tkinter (comes with most Python installs)
 
 Install feedparser if needed:
-'''
+
   pip install feedparser
-'''
+
   
