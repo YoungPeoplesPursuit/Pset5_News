@@ -1,0 +1,7 @@
+t1,TITLE,AI
+
+t2,DESCRIPTION,economy
+
+t3,DESCRIPTION,college
+
+ADD,t1,t2,t3

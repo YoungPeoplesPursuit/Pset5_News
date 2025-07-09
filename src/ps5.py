@@ -268,70 +268,12 @@ def read_trigger_config(filename):
                 triggerkeys[triggername] = function(linelist[2])
             else:
                 function = triggerkeys2arg[triggertype]
-                triggerkeys[triggername] = function(linelist[2], linelist[3])
+                arg1 = triggerkeys[linelist[2]]
+                arg2 = triggerkeys[linelist[3]]
+                triggerkeys[triggername] = function(arg1, arg2)
 
     return addedtriggers
-'''
 
-
-    print("\n--- Reading Triggers Configuration ---")  # Debug print
-    for line in lines:
-        print(f"Processing line: '{line}'")  # Debug print
-        linelist = [item.strip() for item in line.split(',')]
-
-        trigger_identifier = linelist[0]
-
-        if trigger_identifier == 'ADD':
-            print(f"  --> Handling ADD command.")  # Debug print
-            for i in range(1, len(linelist)):
-                trigger_name_to_add = linelist[i]
-                if trigger_name_to_add in triggerkeys:
-                    addedtriggers.append(triggerkeys[trigger_name_to_add])
-                    print(
-                        f"    Added '{trigger_name_to_add}' (type: {type(triggerkeys[trigger_name_to_add])}) to final list.")  # Debug print
-                else:
-                    print(
-                        f"    Warning: Trigger '{trigger_name_to_add}' not found in defined triggers for ADD command.")  # Debug print
-        else:  # Defines a new trigger
-            trigger_name = trigger_identifier
-            trigger_type = linelist[1]
-            print(f"  --> Defining trigger '{trigger_name}' of type '{trigger_type}'.")  # Debug print
-
-            if trigger_type in triggerkeys1arg:
-                constructor_func = triggerkeys1arg[trigger_type]
-                arg = linelist[2]
-                trigger_obj = constructor_func(arg)  # Call the class constructor
-                triggerkeys[trigger_name] = trigger_obj
-                print(f"    Defined '{trigger_name}' as {type(trigger_obj)} with arg '{arg}'.")  # Debug print
-            elif trigger_type in triggerkeys2arg:
-                constructor_func = triggerkeys2arg[trigger_type]
-                arg1_name = linelist[2]
-                arg2_name = linelist[3]
-
-                if arg1_name in triggerkeys and arg2_name in triggerkeys:
-                    arg1_obj = triggerkeys[arg1_name]
-                    arg2_obj = triggerkeys[arg2_name]
-                    trigger_obj = constructor_func(arg1_obj, arg2_obj)  # Call the class constructor
-                    triggerkeys[trigger_name] = trigger_obj
-                    print(
-                        f"    Defined '{trigger_name}' as {type(trigger_obj)} with args '{arg1_name}' ({type(arg1_obj)}) and '{arg2_name}' ({type(arg2_obj)}).")  # Debug print
-                else:
-                    print(f"    Error: Dependent triggers for '{trigger_name}' ({arg1_name}, {arg2_name}) not found. "
-                          f"Ensure they are defined before composite triggers.")  # Debug print
-            else:
-                print(f"    Error: Unknown trigger type '{trigger_type}' found in configuration file.")  # Debug print
-
-    print("\n--- Final Triggerkeys Dictionary ---")  # Debug print
-    for name, obj in triggerkeys.items():
-        print(f"  '{name}': {type(obj)}")
-
-    print("\n--- Final AddedTriggers List ---")  # Debug print
-    for i, obj in enumerate(addedtriggers):
-        print(f"  Index {i}: {type(obj)}")
-    print("------------------------------------\n")
-
-    return addedtriggers
-'''
 
 SLEEPTIME = 120 #seconds -- how often we poll
 
@@ -348,6 +290,7 @@ def main_thread(master):
         # Problem 11
 
         triggerlist = read_trigger_config('triggers.txt')
+        triggerlist = read_trigger_config('myfeed')
         
         # HELPER CODE - you don't need to understand this!
         # Draws the popup window that displays the filtered stories
